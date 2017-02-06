@@ -4,7 +4,7 @@
 
 CopperPDF is a PDF viewer based on [pdf.js](https://mozilla.github.io/pdf.js/) in a WebView. It doesn’t require any permissions since it relies on content providers via `ACTION_VIEW` and `ACTION_OPEN_DOCUMENT` for the application/pdf mime type rather than requesting storage access. It only has access to data that the user explicitly provides to it.
 
-This is a fork  of [PDF Viewer](https://github.com/CopperheadOS/platform_packages_apps_PdfViewer) from CopperheadOS made before the license [was changed](https://github.com/CopperheadOS/platform_packages_apps_PdfViewer/commit/158fe6c80a4e83334d7ea6d24c689709855d9963) from Apache 2.0 to Creative Commons Attribution-NonCommercial-ShareAlike, which is not Free Software due to the NonCommercial clause.
+This is a fork  of [PDF Viewer](https://github.com/CopperheadOS/platform_packages_apps_PdfViewer) from CopperheadOS made before the license [was changed](https://github.com/CopperheadOS/platform_packages_apps_PdfViewer/commit/158fe6c80a4e83334d7ea6d24c689709855d9963) from Apache 2.0 to Creative Commons Attribution-NonCommercial-ShareAlike, which is not a Free/Libre Software license due to the NonCommercial clause.
 
 ## Technical Overview
 
