@@ -8,4 +8,4 @@ This is a fork  of [PDF Viewer](https://github.com/CopperheadOS/platform_package
 
 ## Contributions
 
-Pull requests are welcome. Please don't submit feature requests if you're not willing to contribute with code; I'm not an Android developer, so I won't implement them. Do not rip off non-free code from Copperhead's repository: this fork is about freedom, not about features.
+Pull requests are welcome. Please don't submit feature requests if you're not willing to contribute with code; I'm not an Android developer, so I won't implement them. Do not rip off non-free code from Copperhead's repository. The licenses are not compatible, so new features have to be written from scratch.
