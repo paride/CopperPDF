@@ -6,6 +6,12 @@ CuprumPDF is a PDF viewer based on [pdf.js](https://mozilla.github.io/pdf.js/), 
 
 This is a fork  of [PDF Viewer](https://github.com/CopperheadOS/platform_packages_apps_PdfViewer) from CopperheadOS made before the license [was changed](https://github.com/CopperheadOS/platform_packages_apps_PdfViewer/commit/158fe6c80a4e83334d7ea6d24c689709855d9963) from Apache 2.0 to Creative Commons Attribution-NonCommercial-ShareAlike, which is not a Free/Libre Software license due to the NonCommercial clause. The credit for the idea and implementation goes to the original author.
 
+## Get it
+
+[<img src="https://f-droid.org/badge/get-it-on.png"
+      alt="Get it on F-Droid"
+      height="80">](https://f-droid.org/app/org.ninthfloor.copperpdf)
+
 ## Contributions
 
 Pull requests are welcome. Please don't submit feature requests if you're not willing to contribute with code; I'm not an Android developer, so I won't implement them. Do not rip off non-free code from Copperhead's repository. The licenses are not compatible, so new features have to be written from scratch.
