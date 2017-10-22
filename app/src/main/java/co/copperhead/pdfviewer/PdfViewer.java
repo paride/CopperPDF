@@ -70,7 +70,7 @@ public class PdfViewer extends Activity {
 
         setContentView(R.layout.webview);
 
-        mWebView = (WebView) findViewById(R.id.webView1);
+        mWebView = findViewById(R.id.webView1);
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
 
@@ -97,7 +97,7 @@ public class PdfViewer extends Activity {
             if (!type.equals("application/pdf")) {
                 throw new RuntimeException();
             }
-            mUri = (Uri) intent.getData();
+            mUri = intent.getData();
             mChannel.mPage = 1;
         }
 
