@@ -1,12 +1,16 @@
 package co.copperhead.pdfviewer;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -110,6 +114,13 @@ public class PdfViewer extends Activity {
         mWebView.evaluateJavascript("onGetDocument()", null);
     }
 
+    private void createPrintJob(WebView webView) {
+        PrintManager printManager = (PrintManager) this.getSystemService(Context.PRINT_SERVICE);
+        // TODO: get PDF metadata (title) from PDF.js, replace deprecated method
+        PrintDocumentAdapter adapter = webView.createPrintDocumentAdapter();
+        printManager.print(getString(R.string.pdf_document), adapter, new PrintAttributes.Builder().build());
+    }
+
     private void openDocument() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -208,6 +219,10 @@ public class PdfViewer extends Activity {
 
                 return super.onOptionsItemSelected(item);
             }
+            case R.id.action_print:
+                // TODO: should wait for PDF.js to have fully loaded page
+                createPrintJob(mWebView);
+                return super.onOptionsItemSelected(item);
             default:
                 return super.onOptionsItemSelected(item);
         }

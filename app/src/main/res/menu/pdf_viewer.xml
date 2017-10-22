@@ -42,4 +42,10 @@
         android:title="@string/action_jump_to_page"
         android:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_print"
+        android:icon="@drawable/ic_print_white_24dp"
+        android:title="@string/action_print"
+        android:showAsAction="ifRoom" />
+
 </menu>
