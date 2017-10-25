@@ -90,8 +90,14 @@ public class PdfViewer extends Activity {
         String type = intent.getType();
 
         if (Intent.ACTION_VIEW.equals(action)) {
-            if (!type.equals("application/pdf")) {
-                throw new RuntimeException();
+            if (!"application/pdf".equals(type)) {
+                String appName = getString(R.string.app_name);
+                Toast.makeText(this,
+                        appName + ": unsupported file type: " + intent.getType(),
+                        Toast.LENGTH_SHORT).show();
+                setResult(RESULT_CANCELED);
+                finish();
+                return;
             }
             mUri = (Uri) intent.getData();
             mChannel.mPage = 1;
