@@ -3,12 +3,18 @@ package co.copperhead.pdfviewer;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -125,6 +131,29 @@ public class PdfViewer extends Activity {
 
     private void loadPdf() {
         mWebView.evaluateJavascript("onGetDocument()", null);
+
+        ContentResolver contentResolver = getContentResolver();
+        Cursor cursor = contentResolver.query(mUri, null, null, null, null);
+        String[] projection = new String[]{
+                OpenableColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.TITLE,
+        };
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                for (String check : projection) {
+                    int index = cursor.getColumnIndex(check);
+                    if (index > -1) {
+                        String name = cursor.getString(index);
+                        if (!TextUtils.isEmpty(name)) {
+                            setTitle(name);
+                            setTaskDescription(new ActivityManager.TaskDescription(name));
+                            break;
+                        }
+                    }
+                }
+            }
+            cursor.close();
+        }
     }
 
     private void openDocument() {
