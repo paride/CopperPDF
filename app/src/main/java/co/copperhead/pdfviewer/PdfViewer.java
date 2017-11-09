@@ -7,11 +7,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -65,6 +67,8 @@ public class PdfViewer extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
 
         setContentView(R.layout.webview);
         ActionBar actionBar = getActionBar();
@@ -136,7 +140,11 @@ public class PdfViewer extends Activity {
                 @Override
                 public void run() {
                     mWebView.loadUrl("about:blank");
-                    finish();
+                    if (Build.VERSION.SDK_INT < 21) {
+                        finish();
+                    } else {
+                        finishAndRemoveTask();
+                    }
                 }
             });
         }
