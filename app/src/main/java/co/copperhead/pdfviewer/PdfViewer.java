@@ -1,8 +1,9 @@
 package co.copperhead.pdfviewer;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 public class PdfViewer extends Activity {
     private static final int MAX_ZOOM_LEVEL = 4;
@@ -65,6 +67,11 @@ public class PdfViewer extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.webview);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeActionContentDescription(R.string.action_close);
+        }
 
         mWebView = (WebView) findViewById(R.id.webView1);
         WebSettings settings = mWebView.getSettings();
@@ -123,6 +130,18 @@ public class PdfViewer extends Activity {
         startActivityForResult(intent, ACTION_OPEN_DOCUMENT_REQUEST_CODE);
     }
 
+    private void closeDocument() {
+        if (mWebView != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mWebView.loadUrl("about:blank");
+                    finish();
+                }
+            });
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -170,6 +189,11 @@ public class PdfViewer extends Activity {
             case R.id.action_open:
                 openDocument();
                 return super.onOptionsItemSelected(item);
+
+            case android.R.id.home:
+            case R.id.action_close:
+                closeDocument();
+                return true;
 
             case R.id.action_zoom_out:
                 if (mChannel.mZoomLevel > 0) {
