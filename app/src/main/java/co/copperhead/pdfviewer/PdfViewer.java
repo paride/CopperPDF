@@ -190,6 +190,7 @@ public class PdfViewer extends Activity {
 
     private void renderDocument() {
         documentLoaded = false;
+        invalidateOptionsMenu();
         mWebView.evaluateJavascript("onRenderPage()", null);
     }
 
@@ -235,7 +236,14 @@ public class PdfViewer extends Activity {
         inflater.inflate(R.menu.pdf_viewer, menu);
 
         if (documentLoaded) {
-            menu.findItem(R.id.action_print).setVisible(true);
+            for (int itemId : new int[] { R.id.action_previous,
+                                    R.id.action_next,
+                                    R.id.action_close,
+                                    R.id.action_zoom_out,
+                                    R.id.action_zoom_in,
+                                    R.id.action_print }) {
+                menu.findItem(itemId).setVisible(true);
+            }
         }
 
         return true;
