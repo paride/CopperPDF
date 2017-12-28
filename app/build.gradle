@@ -11,7 +11,7 @@ def getGitVersionName = { ->
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
 
     defaultConfig {
         applicationId "org.ninthfloor.copperpdf"

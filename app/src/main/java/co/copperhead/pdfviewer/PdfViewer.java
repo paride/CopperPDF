@@ -13,6 +13,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
@@ -86,7 +89,7 @@ public class PdfViewer extends Activity {
             actionBar.setHomeActionContentDescription(R.string.action_close);
         }
 
-        mWebView = (WebView) findViewById(R.id.webView1);
+        mWebView = findViewById(R.id.webView1);
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
 
@@ -127,7 +130,7 @@ public class PdfViewer extends Activity {
                 finish();
                 return;
             }
-            mUri = (Uri) intent.getData();
+            mUri = intent.getData();
             mChannel.mPage = 1;
         }
 
@@ -165,6 +168,13 @@ public class PdfViewer extends Activity {
             }
             cursor.close();
         }
+    }
+
+    private void createPrintJob(WebView webView) {
+        PrintManager printManager = (PrintManager) this.getSystemService(Context.PRINT_SERVICE);
+        // TODO: get PDF metadata (title) from PDF.js, replace deprecated method
+        PrintDocumentAdapter adapter = webView.createPrintDocumentAdapter();
+        printManager.print(getString(R.string.pdf_document), adapter, new PrintAttributes.Builder().build());
     }
 
     private void openDocument() {
@@ -286,6 +296,10 @@ public class PdfViewer extends Activity {
 
                 return super.onOptionsItemSelected(item);
             }
+            case R.id.action_print:
+                // TODO: should wait for PDF.js to have fully loaded page
+                createPrintJob(mWebView);
+                return super.onOptionsItemSelected(item);
             default:
                 return super.onOptionsItemSelected(item);
         }
