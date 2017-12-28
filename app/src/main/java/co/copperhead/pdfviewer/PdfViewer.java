@@ -1,22 +1,35 @@
 package co.copperhead.pdfviewer;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 public class PdfViewer extends Activity {
     private static final int MAX_ZOOM_LEVEL = 4;
@@ -64,7 +77,14 @@ public class PdfViewer extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+
         setContentView(R.layout.webview);
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeActionContentDescription(R.string.action_close);
+        }
 
         mWebView = (WebView) findViewById(R.id.webView1);
         WebSettings settings = mWebView.getSettings();
@@ -85,13 +105,27 @@ public class PdfViewer extends Activity {
             }
         });
 
+        // some apps launch the PDF document, but leave the keyboard open, so hide it
+        View view = this.getCurrentFocus();
+        if (view == null) {
+            view = findViewById(android.R.id.content).getRootView();
+        }
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
 
         if (Intent.ACTION_VIEW.equals(action)) {
-            if (!type.equals("application/pdf")) {
-                throw new RuntimeException();
+            if (!"application/pdf".equals(type)) {
+                String appName = getString(R.string.app_name);
+                Toast.makeText(this,
+                        appName + ": unsupported file type: " + intent.getType(),
+                        Toast.LENGTH_SHORT).show();
+                setResult(RESULT_CANCELED);
+                finish();
+                return;
             }
             mUri = (Uri) intent.getData();
             mChannel.mPage = 1;
@@ -108,6 +142,29 @@ public class PdfViewer extends Activity {
 
     private void loadPdf() {
         mWebView.evaluateJavascript("onGetDocument()", null);
+
+        ContentResolver contentResolver = getContentResolver();
+        Cursor cursor = contentResolver.query(mUri, null, null, null, null);
+        String[] projection = new String[]{
+                OpenableColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.TITLE,
+        };
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                for (String check : projection) {
+                    int index = cursor.getColumnIndex(check);
+                    if (index > -1) {
+                        String name = cursor.getString(index);
+                        if (!TextUtils.isEmpty(name)) {
+                            setTitle(name);
+                            setTaskDescription(new ActivityManager.TaskDescription(name));
+                            break;
+                        }
+                    }
+                }
+            }
+            cursor.close();
+        }
     }
 
     private void openDocument() {
@@ -115,6 +172,22 @@ public class PdfViewer extends Activity {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/pdf");
         startActivityForResult(intent, ACTION_OPEN_DOCUMENT_REQUEST_CODE);
+    }
+
+    private void closeDocument() {
+        if (mWebView != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mWebView.loadUrl("about:blank");
+                    if (Build.VERSION.SDK_INT < 21) {
+                        finish();
+                    } else {
+                        finishAndRemoveTask();
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -164,6 +237,11 @@ public class PdfViewer extends Activity {
             case R.id.action_open:
                 openDocument();
                 return super.onOptionsItemSelected(item);
+
+            case android.R.id.home:
+            case R.id.action_close:
+                closeDocument();
+                return true;
 
             case R.id.action_zoom_out:
                 if (mChannel.mZoomLevel > 0) {
