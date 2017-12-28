@@ -10,19 +10,21 @@
         android:id="@+id/action_previous"
         android:icon="@drawable/ic_navigate_before_white_24dp"
         android:title="@string/action_previous"
+        android:visible="false"
         android:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_next"
         android:icon="@drawable/ic_navigate_next_white_24dp"
         android:title="@string/action_next"
+        android:visible="false"
         android:showAsAction="ifRoom" />
 
     <item
-            android:id="@+id/action_open"
-            android:icon="@drawable/ic_insert_drive_file_white_24dp"
-            android:title="@string/action_open"
-            android:showAsAction="ifRoom" />
+        android:id="@+id/action_open"
+        android:icon="@drawable/ic_insert_drive_file_white_24dp"
+        android:title="@string/action_open"
+        android:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_close"
