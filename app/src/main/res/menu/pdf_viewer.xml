@@ -10,48 +10,55 @@
         android:id="@+id/action_previous"
         android:icon="@drawable/ic_navigate_before_white_24dp"
         android:title="@string/action_previous"
+        android:visible="false"
         android:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_next"
         android:icon="@drawable/ic_navigate_next_white_24dp"
         android:title="@string/action_next"
+        android:visible="false"
         android:showAsAction="ifRoom" />
 
     <item
-            android:id="@+id/action_open"
-            android:icon="@drawable/ic_insert_drive_file_white_24dp"
-            android:title="@string/action_open"
-            android:showAsAction="ifRoom" />
+        android:id="@+id/action_open"
+        android:icon="@drawable/ic_insert_drive_file_white_24dp"
+        android:title="@string/action_open"
+        android:showAsAction="ifRoom" />
 
     <item
-            android:id="@+id/action_close"
-            android:icon="@android:drawable/ic_menu_close_clear_cancel"
-            android:title="@string/action_close"
-            android:showAsAction="ifRoom" />
+        android:id="@+id/action_close"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:title="@string/action_close"
+        android:visible="false"
+        android:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_zoom_out"
         android:icon="@drawable/ic_zoom_out_white_24dp"
         android:title="@string/action_zoom_out"
+        android:visible="false"
         android:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_zoom_in"
         android:icon="@drawable/ic_zoom_in_white_24dp"
         android:title="@string/action_zoom_in"
+        android:visible="false"
         android:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_jump_to_page"
         android:icon="@drawable/ic_pageview_white_24dp"
         android:title="@string/action_jump_to_page"
+        android:visible="false"
         android:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_print"
         android:icon="@drawable/ic_print_white_24dp"
         android:title="@string/action_print"
+        android:visible="false"
         android:showAsAction="ifRoom" />
 
 </menu>

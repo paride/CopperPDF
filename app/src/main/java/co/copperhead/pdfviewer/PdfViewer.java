@@ -44,6 +44,7 @@ public class PdfViewer extends Activity {
     private WebView mWebView;
     private Uri mUri;
     private Channel mChannel;
+    private boolean documentLoaded;
 
     private class Channel {
         private int mPage;
@@ -73,6 +74,9 @@ public class PdfViewer extends Activity {
         public void setNumPages(int numPages) {
             mNumPages = numPages;
         }
+
+        @JavascriptInterface
+        public void onDocumentLoaded() { documentLoaded = true; invalidateOptionsMenu(); }
     }
 
     @Override
@@ -184,6 +188,12 @@ public class PdfViewer extends Activity {
         startActivityForResult(intent, ACTION_OPEN_DOCUMENT_REQUEST_CODE);
     }
 
+    private void renderDocument() {
+        documentLoaded = false;
+        invalidateOptionsMenu();
+        mWebView.evaluateJavascript("onRenderPage()", null);
+    }
+
     private void closeDocument() {
         if (mWebView != null) {
             runOnUiThread(new Runnable() {
@@ -224,6 +234,18 @@ public class PdfViewer extends Activity {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.pdf_viewer, menu);
+
+        if (documentLoaded) {
+            for (int itemId : new int[] { R.id.action_previous,
+                                    R.id.action_next,
+                                    R.id.action_close,
+                                    R.id.action_zoom_out,
+                                    R.id.action_zoom_in,
+                                    R.id.action_print }) {
+                menu.findItem(itemId).setVisible(true);
+            }
+        }
+
         return true;
     }
 
@@ -233,14 +255,14 @@ public class PdfViewer extends Activity {
             case R.id.action_previous:
                 if (mChannel.mPage > 1) {
                     mChannel.mPage--;
-                    mWebView.evaluateJavascript("onRenderPage()", null);
+                    renderDocument();
                 }
                 return super.onOptionsItemSelected(item);
 
             case R.id.action_next:
                 if (mChannel.mPage < mChannel.mNumPages) {
                     mChannel.mPage++;
-                    mWebView.evaluateJavascript("onRenderPage()", null);
+                    renderDocument();
                 }
                 return super.onOptionsItemSelected(item);
 
@@ -256,14 +278,14 @@ public class PdfViewer extends Activity {
             case R.id.action_zoom_out:
                 if (mChannel.mZoomLevel > 0) {
                     mChannel.mZoomLevel--;
-                    mWebView.evaluateJavascript("onRenderPage()", null);
+                    renderDocument();
                 }
                 return super.onOptionsItemSelected(item);
 
             case R.id.action_zoom_in:
                 if (mChannel.mZoomLevel < MAX_ZOOM_LEVEL) {
                     mChannel.mZoomLevel++;
-                    mWebView.evaluateJavascript("onRenderPage()", null);
+                    renderDocument();
                 }
                 return super.onOptionsItemSelected(item);
 
@@ -287,7 +309,7 @@ public class PdfViewer extends Activity {
                             int page = picker.getValue();
                             if (page >= 1 && page <= mChannel.mNumPages) {
                                 mChannel.mPage = page;
-                                mWebView.evaluateJavascript("onRenderPage()", null);
+                                renderDocument();
                             }
                         }
                     })

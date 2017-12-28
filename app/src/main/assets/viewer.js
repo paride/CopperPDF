@@ -63,5 +63,6 @@ function onGetDocument() {
         channel.setNumPages(pdfDoc.numPages);
         scale = zoomLevels[channel.getZoomLevel()] / 100;
         renderPage(channel.getPage());
+        channel.onDocumentLoaded();
     });
 }
