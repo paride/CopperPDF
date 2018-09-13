@@ -1,3 +1,5 @@
+**Warning: I am not actively maintaining this app anymore. Feel free to fork this repository keeping the app name and to hijack the F-Droid app. Should you do so please drop me a note, so I'll be able to update this notice and point to your repository.**
+
 # CuprumPDF
 
 ## Description
