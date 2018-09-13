@@ -23,6 +23,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -95,6 +97,10 @@ public class PdfViewer extends Activity {
 
         settings.setAllowFileAccess(false);
         settings.setAllowUniversalAccessFromFileURLs(true);
+
+        settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
+        settings.setDisplayZoomControls(false);
 
         mChannel = new Channel();
         mWebView.addJavascriptInterface(mChannel, "channel");
