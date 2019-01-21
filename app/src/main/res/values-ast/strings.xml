@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CuprumPDF</string>
+    <string name="pdf_document">Documentu PDF</string>
+
+    <!---->
+    <string name="action_previous">Páxina siguiente</string>
+    <string name="action_next">Páxina anterior</string>
+    <string name="action_open">Abrir documentu</string>
+    <string name="action_close">Zarrar documentu</string>
+    <string name="action_zoom_out">Alloñar</string>
+    <string name="action_zoom_in">Averar</string>
+    <string name="action_jump_to_page">Saltar a la páxina</string>
+    <string name="action_print">Imprentar páxina actuam</string>
+</resources>
